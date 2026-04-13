@@ -1,136 +1,195 @@
 @extends('layouts.app')
-@section('title', 'Free QR Code Generator')
+@section('title', 'Pro vCard QR Generator')
 
 @section('content')
-<div class="row pt-5">
-    <div class="col-md-7 mb-4">
-        <h1 class="fw-bold mb-1">Create Custom QR Codes</h1>
-        <p class="text-muted mb-4">Generate and customize your dynamic or static QR codes seamlessly.</p>
-        
-        <div class="glass-card p-4">
+<div class="row align-items-center mb-5 mt-md-4">
+    <div class="col-lg-12 text-center mb-3">
+        <h1 class="display-4 fw-bold mb-2 gradient-text">Smart vCard Generator</h1>
+        <p class="h5 fw-light accent-text mx-auto" style="max-width: 650px;">Digital business cards, perfected for the modern era.</p>
+    </div>
+</div>
+
+<div class="row g-5">
+    <!-- LEFT SIDE: Generator Form -->
+    <div class="col-lg-7">
+        <div class="glass-card p-4 p-md-5">
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-primary bg-opacity-10 p-3 rounded-4 me-3" style="background: rgba(99, 102, 241, 0.1);">
+                    <i class="fa-solid fa-wand-sparkles text-primary fs-4"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0 text-white">Identity Details</h4>
+                    <p class="text-slate-400 small mb-0">Fill your information below</p>
+                </div>
+            </div>
+
+            <div class="nav-tabs-wrapper mb-4">
+                <ul class="nav nav-pills nav-justified p-1 rounded-4" id="qrTabs" role="tablist" style="background: rgba(255,255,255,0.05);">
+                    <li class="nav-item">
+                        <button class="nav-link active rounded-3 py-3" data-bs-toggle="pill" onclick="setType('vcard')"><i class="fa-solid fa-user-tag me-2"></i>vCard</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link rounded-3 py-3" data-bs-toggle="pill" onclick="setType('url')"><i class="fa-solid fa-globe me-2"></i>URL</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link rounded-3 py-3" data-bs-toggle="pill" onclick="setType('text')"><i class="fa-solid fa-pen-nib me-2"></i>Text</button>
+                    </li>
+                </ul>
+            </div>
+
             <form id="qrForm" onsubmit="event.preventDefault(); downloadQr();">
                 @csrf
-                <div class="mb-3">
-                    <label class="form-label fw-bold">QR Name (for your dashboard)</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="e.g. Campaign Links" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Select Content Type</label>
-                    <select class="form-select" name="type" id="type" onchange="toggleFields()">
-                        <option value="url">URL / Website Link</option>
-                        <option value="text">Plain Text</option>
-                        <option value="vcard">Virtual Contact (vCard)</option>
-                        <option value="bio_link">Contact Profile (Bio-Link)</option>
-                    </select>
-                </div>
-
-                <!-- URL/Text Field -->
-                <div id="standardField" class="mb-4">
-                    <label class="form-label fw-bold" id="contentLabel">Destination URL</label>
-                    <textarea class="form-control" name="destination_url" id="destination_url" rows="3" placeholder="https://..." oninput="debouncePreview()"></textarea>
-                </div>
-
-                <!-- Contact Fields -->
-                <div id="contactFields" class="d-none">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Full Name</label>
-                            <input type="text" class="form-control" id="contact_name" placeholder="John Doe" oninput="debouncePreview()">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Company Name</label>
-                            <input type="text" class="form-control" id="contact_company" placeholder="Acme Inc." oninput="debouncePreview()">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Email</label>
-                            <input type="email" class="form-control" id="contact_email" placeholder="john@example.com" oninput="debouncePreview()">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Personal Website</label>
-                            <input type="url" class="form-control" id="contact_website" placeholder="https://..." oninput="debouncePreview()">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Mobile No</label>
-                            <input type="text" class="form-control" id="contact_mobile" placeholder="+123456789" oninput="debouncePreview()">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Company Website</label>
-                            <input type="url" class="form-control" id="contact_company_website" placeholder="https://company.com" oninput="debouncePreview()">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Facebook URL</label>
-                            <input type="url" class="form-control" id="contact_facebook" placeholder="https://facebook.com/..." oninput="debouncePreview()">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Youtube URL</label>
-                            <input type="url" class="form-control" id="contact_youtube" placeholder="https://youtube.com/..." oninput="debouncePreview()">
-                        </div>
-                        <div class="col-12 mb-3">
-                            <label class="form-label fw-bold">Address</label>
-                            <textarea class="form-control" id="contact_address" rows="2" placeholder="Street, City, Country" oninput="debouncePreview()"></textarea>
-                        </div>
-                    </div>
-                </div>
+                <input type="hidden" name="type" id="type" value="vcard">
                 
-                <h5 class="fw-bold mb-3">Customization</h5>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Foreground Color</label>
-                        <input type="color" class="form-control form-control-color w-100" name="foreground_color" id="foreground_color" value="#000000" onchange="updatePreview()">
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-slate-400 small text-uppercase tracking-wider mb-2">Campaign Name</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="John Doe Digital Card" required>
+                </div>
+
+                <div id="contactFields" class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label x-small text-uppercase fw-bold text-slate-400 mb-1">Full Name</label>
+                        <input type="text" class="form-control" id="contact_name" placeholder="John Doe" oninput="debouncePreview()">
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Background Color</label>
-                        <input type="color" class="form-control form-control-color w-100" name="background_color" id="background_color" value="#ffffff" onchange="updatePreview()">
+                    <div class="col-md-6">
+                        <label class="form-label x-small text-uppercase fw-bold text-slate-400 mb-1">Job Title</label>
+                        <input type="text" class="form-control" id="contact_title" placeholder="CEO / Designer" oninput="debouncePreview()">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label x-small text-uppercase fw-bold text-slate-400 mb-1">Company</label>
+                        <input type="text" class="form-control" id="contact_company" placeholder="Acme Inc." oninput="debouncePreview()">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label x-small text-uppercase fw-bold text-slate-400 mb-1">Email</label>
+                        <input type="email" class="form-control" id="contact_email" placeholder="john@domain.com" oninput="debouncePreview()">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label x-small text-uppercase fw-bold text-slate-400 mb-1">Mobile</label>
+                        <input type="text" class="form-control" id="contact_mobile" placeholder="+1234..." oninput="debouncePreview()">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label x-small text-uppercase fw-bold text-slate-400 mb-1">Website</label>
+                        <input type="url" class="form-control" id="contact_website" placeholder="https://..." oninput="debouncePreview()">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label x-small text-uppercase fw-bold text-slate-400 mb-1">Office Address</label>
+                        <textarea class="form-control" id="contact_address" rows="1" placeholder="City, Country" oninput="debouncePreview()"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label x-small text-uppercase fw-bold text-slate-400 mb-1"><i class="fab fa-facebook-f me-1"></i> Facebook</label>
+                        <input type="url" class="form-control" id="contact_facebook" placeholder="URL" oninput="debouncePreview()">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label x-small text-uppercase fw-bold text-slate-400 mb-1"><i class="fab fa-youtube me-1"></i> YouTube</label>
+                        <input type="url" class="form-control" id="contact_youtube" placeholder="URL" oninput="debouncePreview()">
                     </div>
                 </div>
 
-                <div class="mt-4 pt-3 border-top text-end">
+                <div id="standardField" class="d-none mb-4">
+                    <label class="form-label fw-bold text-slate-400 small text-uppercase tracking-wider mb-2" id="contentLabel">Destination</label>
+                    <textarea class="form-control" name="destination_url" id="destination_url" rows="3" placeholder="Paste link here..." oninput="debouncePreview()"></textarea>
+                </div>
+
+                <div class="row g-3 mb-4 pt-3 border-top border-white border-opacity-10">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold x-small text-uppercase text-slate-400 mb-2 d-block">QR Color</label>
+                        <div class="d-flex align-items-center bg-white bg-opacity-5 p-2 rounded-3 border border-white border-opacity-10">
+                             <input type="color" class="form-control form-control-color border border-white border-opacity-20 p-0 me-2" id="foreground_color" value="#000000" onchange="updatePreview()" style="width: 32px; height: 32px; border-radius: 6px; background: transparent;">
+                             <span class="x-small font-monospace text-slate-200" id="fg_hex">#000000</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold x-small text-uppercase text-slate-400 mb-2 d-block">Background</label>
+                        <div class="d-flex align-items-center bg-white bg-opacity-5 p-2 rounded-3 border border-white border-opacity-10">
+                             <input type="color" class="form-control form-control-color border border-white border-opacity-20 p-0 me-2" id="background_color" value="#ffffff" onchange="updatePreview()" style="width: 32px; height: 32px; border-radius: 6px; background: transparent;">
+                             <span class="x-small font-monospace text-slate-200" id="bg_hex">#FFFFFF</span>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <label class="form-label fw-bold x-small text-uppercase text-slate-400 mb-2 d-block">Tracking Style</label>
+                        <div class="form-check form-switch p-2 px-3 bg-white bg-opacity-5 rounded-3 d-flex align-items-center justify-content-between border border-white border-opacity-10">
+                            <label class="form-check-label text-slate-200 small mb-0" for="is_dynamic">
+                                <i class="fa-solid fa-chart-line text-primary me-1"></i>Dynamic Analytics
+                            </label>
+                            <input class="form-check-input" type="checkbox" id="is_dynamic" onchange="updatePreview()" style="width: 40px; height: 20px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid pt-2">
                     @auth
-                        <button type="submit" class="btn btn-primary px-4 fw-bold shadow-sm">
-                            Save & Download <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none ms-1"></span>
+                        <button type="submit" class="btn btn-primary btn-lg py-3">
+                            <span id="btnText"><i class="fa-solid fa-cloud-arrow-down me-2"></i>GENERATE & DOWNLOAD</span>
+                            <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none ms-2"></span>
                         </button>
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-outline-primary px-4 fw-bold">Login to Save & Download</a>
+                        <a href="{{ route('login') }}" class="btn btn-primary btn-lg py-3">
+                            <i class="fa-solid fa-user-lock me-2"></i>SIGN IN TO SAVE
+                        </a>
                     @endauth
                 </div>
             </form>
         </div>
     </div>
-    
-    <div class="col-md-5">
-        <div class="glass-card p-4 text-center sticky-top" style="top: 2rem;">
-            <h5 class="fw-bold text-muted mb-4">Live Preview</h5>
-            <div class="bg-white p-4 rounded d-inline-block shadow-sm" style="border: 1px solid #ddd; min-width: 250px; min-height: 250px; display:flex; align-items:center; justify-content:center;">
-                <img id="qrPreview" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" class="img-fluid rounded" alt="QR Preview" style="width: 100%; max-width: 280px; opacity: 0.3;">
+
+    <!-- RIGHT SIDE: Preview -->
+    <div class="col-lg-5 col-xl-4">
+        <div class="sticky-top" style="top: 130px; z-index: 10;">
+            <div class="glass-card p-4 p-md-5 text-center shadow-2xl">
+                <div class="mb-4">
+                    <span class="badge rounded-pill px-4 py-2 border border-primary border-opacity-50" style="background: rgba(99, 102, 241, 0.15); color: #818cf8; font-weight: 700; letter-spacing: 0.05em;">
+                        <i class="fa-solid fa-satellite-dish fa-fade me-2"></i>LIVE RENDERING
+                    </span>
+                </div>
+
+                <div class="preview-stage-wrapper position-relative mx-auto mb-5" style="max-width: 260px;">
+                    <div id="qrGlow" class="position-absolute top-50 start-50 translate-middle w-100 h-100 rounded-circle opacity-0 transition-all" style="background: var(--primary); filter: blur(70px); z-index: 0;"></div>
+                    <div class="bg-white p-4 rounded-5 position-relative shadow-2xl" style="transform: perspective(1000px) rotateY(-5deg); z-index: 1;">
+                        <img id="qrPreview" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" class="img-fluid" alt="QR Preview" style="width: 100%; opacity: 0.05; transition: all 0.4s ease;">
+                        <div id="previewPlaceholder" class="position-absolute top-50 start-50 translate-middle text-slate-200">
+                            <i class="fa-solid fa-qrcode fa-5x"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="qrInfo" class="alert border-0 bg-primary bg-opacity-10 text-white small d-none py-3 px-4 mb-5 rounded-4 fade-in">
+                    <i class="fa-solid fa-circle-check text-primary me-2"></i>DATA READY & VALIDATED
+                </div>
+
+                <div class="mt-auto pt-4 border-top border-white border-opacity-10 d-flex justify-content-center gap-3">
+                    <div class="px-3 py-1 bg-white bg-opacity-5 rounded-pill x-small text-slate-200 border border-white border-opacity-10">
+                        <i class="fa-solid fa-shield-halved me-1 text-primary"></i>Certified
+                    </div>
+                    <div class="px-3 py-1 bg-white bg-opacity-5 rounded-pill x-small text-slate-200 border border-white border-opacity-10" id="typeStatus">
+                        Static
+                    </div>
+                </div>
             </div>
-            <p class="text-muted small mt-3">Start typing to see your QR code magically appear.</p>
         </div>
     </div>
 </div>
 
 <script>
     let timeout = null;
-    
-    function toggleFields() {
-        const type = document.getElementById('type').value;
+    function setType(type) {
+        document.getElementById('type').value = type;
         const standard = document.getElementById('standardField');
         const contact = document.getElementById('contactFields');
         const label = document.getElementById('contentLabel');
-
-        if(type === 'vcard' || type === 'bio_link') {
+        if(type === 'vcard') {
             standard.classList.add('d-none');
             contact.classList.remove('d-none');
         } else {
             standard.classList.remove('d-none');
             contact.classList.add('d-none');
-            label.innerText = type === 'url' ? 'Destination URL' : 'Plain Text';
+            label.innerText = type === 'url' ? 'URL Destination' : 'Raw Text Content';
         }
         updatePreview();
     }
 
     function debouncePreview() {
         clearTimeout(timeout);
-        timeout = setTimeout(updatePreview, 500);
+        timeout = setTimeout(updatePreview, 300);
     }
 
     function collectData() {
@@ -141,72 +200,80 @@
             type: type,
             foreground_color: document.getElementById('foreground_color').value,
             background_color: document.getElementById('background_color').value,
-            is_dynamic: (type === 'bio_link' ? 1 : 0)
+            is_dynamic: document.getElementById('is_dynamic').checked ? 1 : 0
         };
-
-        if(type === 'vcard' || type === 'bio_link') {
+        if(type === 'vcard') {
             data.content_data = {
                 name: document.getElementById('contact_name').value,
+                title: document.getElementById('contact_title').value,
                 company: document.getElementById('contact_company').value,
                 email: document.getElementById('contact_email').value,
                 mobile: document.getElementById('contact_mobile').value,
                 website: document.getElementById('contact_website').value,
-                company_website: document.getElementById('contact_company_website').value,
+                address: document.getElementById('contact_address').value,
                 facebook: document.getElementById('contact_facebook').value,
                 youtube: document.getElementById('contact_youtube').value,
-                address: document.getElementById('contact_address').value,
             };
         } else {
             data.destination_url = document.getElementById('destination_url').value;
         }
-
         return data;
     }
 
     async function updatePreview() {
         const data = collectData();
-        // Check if any identifying data is present
-        if(data.type !== 'vcard' && data.type !== 'bio_link' && !data.destination_url) return;
-        if((data.type === 'vcard' || data.type === 'bio_link') && !data.content_data.name) return;
+        const img = document.getElementById('qrPreview');
+        const placeholder = document.getElementById('previewPlaceholder');
+        const info = document.getElementById('qrInfo');
+        const glow = document.getElementById('qrGlow');
+        const typeStatus = document.getElementById('typeStatus');
+        typeStatus.innerText = data.is_dynamic ? 'Dynamic' : 'Static';
+
+        if(data.type !== 'vcard' && !data.destination_url) {
+            img.style.opacity = 0.05;
+            placeholder.classList.remove('d-none');
+            info.classList.add('d-none');
+            glow.style.opacity = 0;
+            return;
+        }
+        if(data.type === 'vcard' && !data.content_data.name) {
+             img.style.opacity = 0.05;
+             placeholder.classList.remove('d-none');
+             info.classList.add('d-none');
+             glow.style.opacity = 0;
+             return;
+        }
 
         try {
             const res = await fetch('{{ url("/app-api/qrcodes/preview") }}', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify(data)
             });
             const json = await res.json();
             if(json.data) {
-                const img = document.getElementById('qrPreview');
                 img.src = json.data;
                 img.style.opacity = 1;
+                placeholder.classList.add('d-none');
+                info.classList.remove('d-none');
+                glow.style.opacity = 0.15;
             }
-        } catch(e) {
-            console.error(e);
-        }
+        } catch(e) { console.error(e); }
     }
 
     async function downloadQr() {
         const spinner = document.getElementById('loadingSpinner');
+        const btnText = document.getElementById('btnText');
         spinner.classList.remove('d-none');
-
+        btnText.classList.add('opacity-50');
         const data = collectData();
-
         try {
             const res = await fetch('{{ url("/app-api/qrcodes/download") }}', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify(data)
             });
-            
             const json = await res.json();
-            
             if(json.download_url) {
                 const link = document.createElement('a');
                 link.href = json.download_url;
@@ -214,16 +281,20 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                alert("QR Code saved & downloaded successfully!");
-            } else if(json.message) {
-                alert(json.message);
             }
-        } catch(e) {
-            console.error(e);
-            alert("Something went wrong!");
-        } finally {
+        } catch(e) { console.error(e); } finally {
             spinner.classList.add('d-none');
+            btnText.classList.remove('opacity-50');
         }
     }
+    window.onload = () => updatePreview();
 </script>
+
+<style>
+    .x-small { font-size: 0.75rem; }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+    .nav-pills .nav-link { color: var(--slate-400); background: transparent; transition: all 0.3s ease; }
+    .nav-pills .nav-link:hover { color: #fff; }
+    .nav-pills .nav-link.active { background-color: rgba(255,255,255,0.08) !important; color: #ffffff !important; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+</style>
 @endsection

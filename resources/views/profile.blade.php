@@ -30,7 +30,13 @@
         @endif
         <p class="text-muted mb-4">Contact Profile</p>
 
-        <div class="d-grid">
+        <div class="d-grid gap-2">
+            @if($qrCode->type === 'vcard')
+                <a href="{{ route('qr.vcf', $qrCode->unique_code) }}" class="btn btn-primary btn-lg rounded-4 py-3 mb-2 shadow-sm font-weight-bold">
+                    <i class="fas fa-user-plus me-2"></i> Add to Contacts
+                </a>
+            @endif
+
             @if(!empty($qrCode->content_data['mobile']))
                 <a href="tel:{{ $qrCode->content_data['mobile'] }}" class="btn btn-social btn-call">
                     <i class="fas fa-phone"></i> Call Me
@@ -45,7 +51,7 @@
 
             @if(!empty($qrCode->content_data['website']))
                 <a href="{{ $qrCode->content_data['website'] }}" target="_blank" class="btn btn-social btn-website">
-                    <i class="fas fa-globe"></i> Personal Website
+                    <i class="fas fa-globe"></i> Visit Website
                 </a>
             @endif
 

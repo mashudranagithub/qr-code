@@ -10,8 +10,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Tracking Route
+// Tracking & Contact Routes
 Route::get('/t/{unique_code}', [QrTrackingController::class, 'track'])->name('qr.track');
+Route::get('/vcf/{unique_code}', [QrTrackingController::class, 'downloadVcf'])->name('qr.vcf');
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {

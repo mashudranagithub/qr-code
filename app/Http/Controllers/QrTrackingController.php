@@ -3,11 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\QrCode;
+use App\Services\QrCodeService;
+use Illuminate\Support\Str;
 
 class QrTrackingController extends Controller
 {
+    protected $qrCodeService;
+
+    public function __construct(QrCodeService $qrCodeService)
+    {
+        $this->qrCodeService = $qrCodeService;
+    }
+
     public function track(Request $request, string $unique_code)
     {
         $qrCode = QrCode::where('unique_code', $unique_code)->firstOrFail();
@@ -25,7 +33,7 @@ class QrTrackingController extends Controller
             ]);
         }
 
-        if ($qrCode->type === 'bio_link') {
+        if ($qrCode->type === 'bio_link' || $qrCode->type === 'vcard') {
             return view('profile', compact('qrCode'));
         }
 
@@ -34,6 +42,22 @@ class QrTrackingController extends Controller
         }
 
         return redirect()->away($qrCode->destination_url);
+    }
+
+    public function downloadVcf(string $unique_code)
+    {
+        $qrCode = QrCode::where('unique_code', $unique_code)->firstOrFail();
+        
+        if ($qrCode->type !== 'vcard') {
+            abort(404);
+        }
+
+        $vCardContent = $this->qrCodeService->buildVCard($qrCode->content_data ?? []);
+        $filename = Str::slug($qrCode->content_data['name'] ?? 'contact') . '.vcf';
+
+        return response($vCardContent)
+            ->header('Content-Type', 'text/vcard')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
     }
 
     protected function guessDeviceType(?string $userAgent): string

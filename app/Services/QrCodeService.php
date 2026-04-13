@@ -120,11 +120,12 @@ class QrCodeService
         return $qrCodeModel->destination_url ?? '';
     }
 
-    protected function buildVCard(array $data): string
+    public function buildVCard(array $data): string
     {
         $vcard = "BEGIN:VCARD\nVERSION:3.0\n";
         $vcard .= "FN:" . ($data['name'] ?? '') . "\n";
         $vcard .= "N:;" . ($data['name'] ?? '') . ";;;\n";
+        if (!empty($data['title'])) $vcard .= "TITLE:" . $data['title'] . "\n";
         if (!empty($data['company'])) $vcard .= "ORG:" . $data['company'] . "\n";
         if (!empty($data['email'])) $vcard .= "EMAIL:" . $data['email'] . "\n";
         if (!empty($data['mobile'])) $vcard .= "TEL;TYPE=cell:" . $data['mobile'] . "\n";
