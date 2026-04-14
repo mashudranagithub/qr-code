@@ -50,9 +50,8 @@ class DashboardController extends Controller
         }
 
         // Delete physical file
-        $path = 'qrcodes/' . $qrCode->unique_code . '.png';
-        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
+        if ($qrCode->qr_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($qrCode->qr_path)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($qrCode->qr_path);
         }
 
         $qrCode->delete();

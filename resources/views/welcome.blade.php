@@ -26,13 +26,13 @@
             <div class="nav-tabs-wrapper mb-4">
                 <ul class="nav nav-pills nav-justified p-1 rounded-4" id="qrTabs" role="tablist" style="background: rgba(255,255,255,0.05);">
                     <li class="nav-item">
-                        <button class="nav-link active rounded-3 py-3" data-bs-toggle="pill" onclick="setType('vcard')"><i class="fa-solid fa-user-tag me-2"></i>vCard</button>
+                        <button class="nav-link active rounded-3 py-2" data-bs-toggle="pill" onclick="setType('vcard')"><i class="fa-solid fa-user-tag me-2"></i>vCard</button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link rounded-3 py-3" data-bs-toggle="pill" onclick="setType('url')"><i class="fa-solid fa-globe me-2"></i>URL</button>
+                        <button class="nav-link rounded-3 py-2" data-bs-toggle="pill" onclick="setType('url')"><i class="fa-solid fa-globe me-2"></i>URL</button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link rounded-3 py-3" data-bs-toggle="pill" onclick="setType('text')"><i class="fa-solid fa-pen-nib me-2"></i>Text</button>
+                        <button class="nav-link rounded-3 py-2" data-bs-toggle="pill" onclick="setType('text')"><i class="fa-solid fa-pen-nib me-2"></i>Text</button>
                     </li>
                 </ul>
             </div>
@@ -90,40 +90,40 @@
                     <textarea class="form-control" name="destination_url" id="destination_url" rows="3" placeholder="Paste link here..." oninput="debouncePreview()"></textarea>
                 </div>
 
-                <div class="row g-3 mb-4 pt-3 border-top border-white border-opacity-10">
+                <div class="row g-3 mb-4 pt-4 border-top border-white border-opacity-10">
                     <div class="col-md-6">
                         <label class="form-label fw-bold x-small text-uppercase text-slate-400 mb-2 d-block">QR Color</label>
-                        <div class="d-flex align-items-center bg-white bg-opacity-5 p-2 rounded-3 border border-white border-opacity-10">
-                             <input type="color" class="form-control form-control-color border border-white border-opacity-20 p-0 me-2" id="foreground_color" value="#000000" onchange="updatePreview()" style="width: 32px; height: 32px; border-radius: 6px; background: transparent;">
-                             <span class="x-small font-monospace text-slate-200" id="fg_hex">#000000</span>
+                        <div class="d-flex align-items-center px-3 py-2 rounded-4 border border-white border-opacity-10" style="background: rgba(255, 255, 255, 0.05); height: 48px;">
+                             <input type="color" class="form-control-color border-0 p-0 me-3" id="foreground_color" value="#000000" onchange="updateHex('fg', this.value); updatePreview()" style="width: 28px; height: 28px; border-radius: 6px; background: transparent; cursor: pointer;">
+                             <span class="small font-monospace text-slate-200" id="fg_hex">#000000</span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold x-small text-uppercase text-slate-400 mb-2 d-block">Background</label>
-                        <div class="d-flex align-items-center bg-white bg-opacity-5 p-2 rounded-3 border border-white border-opacity-10">
-                             <input type="color" class="form-control form-control-color border border-white border-opacity-20 p-0 me-2" id="background_color" value="#ffffff" onchange="updatePreview()" style="width: 32px; height: 32px; border-radius: 6px; background: transparent;">
-                             <span class="x-small font-monospace text-slate-200" id="bg_hex">#FFFFFF</span>
+                        <div class="d-flex align-items-center px-3 py-2 rounded-4 border border-white border-opacity-10" style="background: rgba(255, 255, 255, 0.05); height: 48px;">
+                             <input type="color" class="form-control-color border-0 p-0 me-3" id="background_color" value="#ffffff" onchange="updateHex('bg', this.value); updatePreview()" style="width: 28px; height: 28px; border-radius: 6px; background: transparent; cursor: pointer;">
+                             <span class="small font-monospace text-slate-200" id="bg_hex">#FFFFFF</span>
                         </div>
                     </div>
-                    <div class="col-12 mt-3">
+                    <div class="col-12 mt-5">
                         <label class="form-label fw-bold x-small text-uppercase text-slate-400 mb-2 d-block">Tracking Style</label>
-                        <div class="form-check form-switch p-2 px-3 bg-white bg-opacity-5 rounded-3 d-flex align-items-center justify-content-between border border-white border-opacity-10">
-                            <label class="form-check-label text-slate-200 small mb-0" for="is_dynamic">
-                                <i class="fa-solid fa-chart-line text-primary me-1"></i>Dynamic Analytics
+                        <div class="form-check form-switch px-3 py-2 rounded-4 d-flex align-items-center justify-content-between border border-white border-opacity-10" style="background: rgba(255, 255, 255, 0.05); height: 48px;">
+                            <label class="form-check-label text-slate-300 small mb-0 ms-0" for="is_dynamic">
+                                <i class="fa-solid fa-chart-line text-primary me-2"></i>Dynamic Analytics
                             </label>
-                            <input class="form-check-input" type="checkbox" id="is_dynamic" onchange="updatePreview()" style="width: 40px; height: 20px;">
+                            <input class="form-check-input mt-0" type="checkbox" id="is_dynamic" onchange="updatePreview()" style="width: 36px; height: 18px; cursor: pointer;">
                         </div>
                     </div>
                 </div>
 
                 <div class="d-grid pt-2">
                     @auth
-                        <button type="submit" class="btn btn-primary btn-lg py-3">
+                        <button type="submit" class="btn btn-primary">
                             <span id="btnText"><i class="fa-solid fa-cloud-arrow-down me-2"></i>GENERATE & DOWNLOAD</span>
                             <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none ms-2"></span>
                         </button>
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-primary btn-lg py-3">
+                        <a href="{{ route('login') }}" class="btn btn-primary">
                             <i class="fa-solid fa-user-lock me-2"></i>SIGN IN TO SAVE
                         </a>
                     @endauth
@@ -133,8 +133,8 @@
     </div>
 
     <!-- RIGHT SIDE: Preview -->
-    <div class="col-lg-5 col-xl-4">
-        <div class="sticky-top" style="top: 130px; z-index: 10;">
+    <div class="col-lg-5 col-xl-5">
+        <div class="sticky-lg-top" style="top: 130px; z-index: 10;">
             <div class="glass-card p-4 p-md-5 text-center shadow-2xl">
                 <div class="mb-4">
                     <span class="badge rounded-pill px-4 py-2 border border-primary border-opacity-50" style="background: rgba(99, 102, 241, 0.15); color: #818cf8; font-weight: 700; letter-spacing: 0.05em;">
@@ -171,6 +171,9 @@
 
 <script>
     let timeout = null;
+    function updateHex(type, val) {
+        document.getElementById(type + '_hex').innerText = val.toUpperCase();
+    }
     function setType(type) {
         document.getElementById('type').value = type;
         const standard = document.getElementById('standardField');
@@ -295,6 +298,10 @@
     .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
     .nav-pills .nav-link { color: var(--slate-400); background: transparent; transition: all 0.3s ease; }
     .nav-pills .nav-link:hover { color: #fff; }
-    .nav-pills .nav-link.active { background-color: rgba(255,255,255,0.08) !important; color: #ffffff !important; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+    .nav-pills .nav-link.active { 
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important; 
+        color: #ffffff !important; 
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); 
+    }
 </style>
 @endsection

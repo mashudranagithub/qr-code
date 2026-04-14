@@ -8,7 +8,7 @@
             <div class="text-center mb-5">
                 <i class="fa-solid fa-bolt fa-3x text-primary mb-3"></i>
                 <h2 class="fw-bold h3">Get Started for Free</h2>
-                <p class="text-muted">Create your account and start generating smart codes</p>
+                <p class="text-slate-400">Create your account and start generating smart codes</p>
             </div>
 
             @if ($errors->any())
@@ -24,7 +24,7 @@
             <form action="{{ route('register') }}" method="POST">
                 @csrf
                 <div class="mb-4">
-                    <label for="name" class="form-label small fw-600 text-uppercase">Full Name</label>
+                    <label for="name" class="form-label small fw-600 text-uppercase text-slate-300">Full Name</label>
                     <div class="input-group">
                         <span class="input-group-text bg-white border-end-0 rounded-start-4">
                             <i class="fa-regular fa-user text-muted"></i>
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="email" class="form-label small fw-600 text-uppercase">Email Address</label>
+                    <label for="email" class="form-label small fw-600 text-uppercase text-slate-300">Email Address</label>
                     <div class="input-group">
                         <span class="input-group-text bg-white border-end-0 rounded-start-4">
                             <i class="fa-regular fa-envelope text-muted"></i>
@@ -45,7 +45,7 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-4">
-                        <label for="password" class="form-label small fw-600 text-uppercase">Password</label>
+                        <label for="password" class="form-label small fw-600 text-uppercase text-slate-300">Password</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0 rounded-start-4">
                                 <i class="fa-solid fa-lock text-muted"></i>
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-4">
-                        <label for="password_confirmation" class="form-label small fw-600 text-uppercase">Confirm Password</label>
+                        <label for="password_confirmation" class="form-label small fw-600 text-uppercase text-slate-300">Confirm Password</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0 rounded-start-4">
                                 <i class="fa-solid fa-lock text-muted"></i>
@@ -64,16 +64,16 @@
                     </div>
                 </div>
 
-                <div class="mb-4 text-muted small">
+                <div class="mb-4 text-slate-400 small">
                     By signing up, you agree to our <a href="#" class="text-primary text-decoration-none">Terms of Service</a> and <a href="#" class="text-primary text-decoration-none">Privacy Policy</a>.
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100 py-3 mb-4 shadow">
+                <button type="submit" class="btn btn-primary w-100 mb-4">
                     <i class="fa-solid fa-user-plus me-2"></i>Create My Account
                 </button>
 
                 <div class="text-center">
-                    <p class="text-muted small mb-0">Already have an account? 
+                    <p class="text-slate-400 small mb-0">Already have an account? 
                         <a href="{{ route('login') }}" class="text-primary fw-600 text-decoration-none">Sign In Instead</a>
                     </p>
                 </div>

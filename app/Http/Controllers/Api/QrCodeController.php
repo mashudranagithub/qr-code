@@ -83,6 +83,19 @@ class QrCodeController extends Controller
 
         // 2. Generate and Save physical file to disk
         $path = $this->qrCodeService->saveToDisk($qrCode, 'png');
+        
+        // 3. Update model with permanent path
+        $qrCode->update(['qr_path' => $path]);
+
+        // 4. Send email notification
+        if (auth()->check()) {
+            try {
+                 \Illuminate\Support\Facades\Mail::to(auth()->user())->send(new \App\Mail\QrCodeGenerated($qrCode));
+            } catch (\Exception $e) {
+                // Log error but don't break the user experience
+                \Log::error('Mail failed: ' . $e->getMessage());
+            }
+        }
 
         // Optional: Return a download response directly, or a JSON with the URL
         if ($request->wantsJson()) {
@@ -95,5 +108,21 @@ class QrCodeController extends Controller
 
         // Return direct download
         return Storage::disk('public')->download($path, $qrCode->name . '.png');
+    }
+
+    public function sendToEmail(QrCode $qrCode)
+    {
+        // Security: Ensure the QR code belongs to the authenticated user
+        if ($qrCode->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        try {
+            \Illuminate\Support\Facades\Mail::to(auth()->user())->send(new \App\Mail\SendQrCodeEmail($qrCode));
+            return response()->json(['message' => 'QR Code has been sent to your email!']);
+        } catch (\Exception $e) {
+            \Log::error('Send to email failed: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to send email. Please try again later.'], 500);
+        }
     }
 }
